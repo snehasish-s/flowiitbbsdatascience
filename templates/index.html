@@ -16,8 +16,13 @@
                 <h1><i class="fas fa-comments"></i> Causal Chat Analysis</h1>
                 <p>Analyze conversation patterns and predict escalations</p>
             </div>
-            <div class="loading-indicator" id="loadingIndicator">
-                <span class="spinner"></span> Loading data...
+            <div class="header-actions">
+                <a href="/analyze" class="analyze-link" title="Analyze a conversation">
+                    <i class="fas fa-search"></i> Analyze Conversation
+                </a>
+                <div class="loading-indicator" id="loadingIndicator">
+                    <span class="spinner"></span> Loading data...
+                </div>
             </div>
         </header>
 
@@ -37,6 +42,9 @@
             </button>
             <button class="tab-btn" data-tab="insights">
                 <i class="fas fa-lightbulb"></i> Insights
+            </button>
+            <button class="tab-btn" data-tab="followup">
+                <i class="fas fa-question-circle"></i> Follow-up Questions
             </button>
         </nav>
 

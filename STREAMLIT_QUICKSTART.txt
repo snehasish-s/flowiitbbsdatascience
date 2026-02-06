@@ -1,0 +1,196 @@
+#!/usr/bin/env python3
+"""
+Quick Start Guide: Streamlit Web Interface
+
+This file explains how to launch the Causal Chat Analysis web app in 3 steps.
+"""
+
+print("""
+╔════════════════════════════════════════════════════════════════════╗
+║                                                                    ║
+║     🎯 CAUSAL CHAT ANALYSIS - STREAMLIT WEB INTERFACE             ║
+║                                                                    ║
+║     Interactive web app for causal reasoning over conversations   ║
+║                                                                    ║
+╚════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+QUICK START
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STEP 1: Install Streamlit
+─────────────────────────────────────────────────────────────────────
+$ pip install streamlit
+
+STEP 2: Run the Web App
+─────────────────────────────────────────────────────────────────────
+$ streamlit run streamlit_app.py
+
+   ✓ Should see: "You can now view your Streamlit app in your browser"
+   ✓ Local URL: http://localhost:8501
+
+STEP 3: Open Browser
+─────────────────────────────────────────────────────────────────────
+   Open: http://localhost:8501
+   That's it! The app will load.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FIRST RUN (One-time Setup)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The app will load data on first run (~20-30 seconds):
+   ✓ Loading transcripts... (5,037)
+   ✓ Preprocessing turns... (84,465)
+   ✓ Computing causal chains... (27)
+   ✓ Initializing query engine...
+   ✓ ✅ Backend loaded!
+
+Subsequent runs will be cached (instant).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SAMPLE QUERIES TO TRY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Basic Query:
+   Transcript ID: 6794-8660-4606-3216
+   Question: "Why did this conversation escalate?"
+   → Should show: Chain, confidence, evidence, alternatives
+
+2. Similar Cases:
+   Transcript ID: 6794-8660-4606-3216
+   Question: "Find similar cases"
+   → Should show: List of transcripts with same pattern
+
+3. Chain Browser:
+   Click: "📋 Browse Chains"
+   → Should show: Top 10 causal chains with confidence
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INTERFACE GUIDE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LEFT SIDEBAR
+   ✓ ✅ Backend Ready (status)
+   ✓ 🔄 Reset (clear session)
+   ✓ System Stats (transcripts, chains, etc.)
+   ✓ Session Info (ID, query count)
+   ✓ How to Use (help documentation)
+
+MAIN AREA
+   ✓ Step 1: Transcript ID input
+   ✓ Step 2: Natural language question
+   ✓ 🔍 Analyze (run query)
+   ✓ 📋 Browse Chains (view all patterns)
+
+RESULTS AREA
+   ✓ 🔗 Causal Chain (e.g., frustration → delay → escalation)
+   ✓ Confidence & CI (95% confidence interval)
+   ✓ 📖 Explanation (readable text)
+   ✓ 💬 Evidence (turn quotes, expandable)
+   ✓ 💭 Alternatives (other explanations)
+   ✓ 🔄 Similar Cases (related conversations)
+
+BOTTOM
+   ✓ 📜 Query History (all previous queries)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ "Module not found: streamlit"
+   → pip install streamlit
+
+❌ "Transcript not found"
+   → Make sure transcript ID is valid (9+ character ID)
+
+❌ Backend loads slowly
+   → Normal on first run. Cached after ~20 seconds.
+
+❌ Error: "Python path not found"
+   → Run from project root directory
+
+❌ Browser shows blank page
+   → Wait 10-20 seconds for backend to load
+   → Check terminal for errors
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FILE STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+causal-chat-analysis/
+├─ streamlit_app.py          ← The web app (NEW)
+├─ src/
+│  ├─ causal_query_engine.py
+│  ├─ explanation_generator.py
+│  ├─ causal_chains.py
+│  ├─ query_context.py
+│  └─ ... (all backend files)
+└─ data/
+   └─ Conversational_Transcript_Dataset.json
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Question any conversation:
+   "Why did this escalate?" → Get causal chain + evidence
+
+✅ Multi-turn interaction:
+   Ask Q1 → System remembers Q2 → Can ask Q3 about same topic
+
+✅ Evidence-backed:
+   Every claim includes direct quotes from original conversation
+
+✅ Statistical rigor:
+   Confidence scores with 95% CI (Wilson score)
+
+✅ Pattern browsing:
+   See all 27 discovered causal patterns with statistics
+
+✅ Similar case finding:
+   Find conversations with same causal pattern
+
+✅ No setup required:
+   No database, no auth, no build process
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TECHNICAL DETAILS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Backend Used (Unchanged):
+   • CausalQueryEngine (asks "why?")
+   • ExplanationGenerator (creates text)
+   • CausalChainDetector (finds patterns)
+   • QueryContext (remembers conversation)
+   • SignalExtraction (detects frustration, delay, denial)
+
+Frontend (Streamlit):
+   • Page layout & styling
+   • Input widgets (textbox, buttons)
+   • Session state management
+   • Result formatting
+   • Multi-turn conversation tracking
+
+Interface:
+   Browser-based, no installation required for users
+
+Data:
+   5,037 conversations, 84,465 turns, 27 causal chains
+
+Performance:
+   <200ms per query (after ~20s first load)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NEXT STEPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Run: streamlit run streamlit_app.py
+2. Open: http://localhost:8501
+3. Try a sample query
+4. Explore the interface
+5. Read help (click "How to Use" in sidebar)
+
+Any issues? Check STREAMLIT_GUIDE_COMPLETE.md for detailed docs.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+""")

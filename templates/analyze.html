@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Causal Chat Analysis - Analyze Conversations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/analyze.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Navigation -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-comments"></i> Causal Chat Analysis</h1>
+                <p>Understand why conversations escalate</p>
+            </div>
+            <nav class="header-nav">
+                <a href="{{ url_for('index') }}" class="nav-link">Dashboard</a>
+                <a href="{{ url_for('analyze_page') }}" class="nav-link active">Analyze</a>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-container">
+            <!-- Introduction Section -->
+            <section id="intro" class="section intro-section">
+                <div class="intro-box">
+                    <h2>Analyze Conversation Escalations</h2>
+                    <p>Paste or upload a customer service conversation to understand:</p>
+                    <ul class="feature-list">
+                        <li><strong>Escalation Signals:</strong> What warning signs were present?</li>
+                        <li><strong>Root Causes:</strong> Why did the conversation escalate?</li>
+                        <li><strong>Evidence:</strong> Which turns in the conversation triggered escalation?</li>
+                        <li><strong>Risk Level:</strong> How severe was the escalation risk?</li>
+                        <li><strong>Follow-up Questions:</strong> Ask clarifying questions about the analysis</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Input Section -->
+            <section id="input" class="section input-section">
+                <div class="form-container">
+                    <h3>Provide Conversation Transcript</h3>
+                    
+                    <!-- Tab for paste vs upload -->
+                    <div class="input-tabs">
+                        <button class="input-tab active" data-tab="paste">
+                            <i class="fas fa-paste"></i> Paste Text
+                        </button>
+                        <button class="input-tab" data-tab="upload">
+                            <i class="fas fa-upload"></i> Upload File
+                        </button>
+                        <button class="input-tab" data-tab="example">
+                            <i class="fas fa-lightbulb"></i> Example
+                        </button>
+                    </div>
+
+                    <!-- Paste Tab -->
+                    <div class="input-tab-content active" id="paste-content">
+                        <textarea id="transcriptText" 
+                                  placeholder="Paste conversation here... Format: 'CUSTOMER: ...' and 'AGENT: ...'"
+                                  rows="15"></textarea>
+                        <button id="analyzeBtn" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Analyze Conversation
+                        </button>
+                    </div>
+
+                    <!-- Upload Tab -->
+                    <div class="input-tab-content" id="upload-content">
+                        <div class="upload-box">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Drag and drop a file here or click to select</p>
+                            <input type="file" id="fileInput" accept=".txt,.json,.csv" style="display: none;">
+                            <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">
+                                Choose File
+                            </button>
+                        </div>
+                        <button id="analyzeFileBtn" class="btn btn-primary" style="display: none;">
+                            <i class="fas fa-search"></i> Analyze File
+                        </button>
+                    </div>
+
+                    <!-- Example Tab -->
+                    <div class="input-tab-content" id="example-content">
+                        <p>Example conversation format:</p>
+                        <pre class="example-transcript">CUSTOMER: Hi, I've been trying to get my refund for 2 weeks
+AGENT: I understand your frustration. Let me check your account.
+AGENT: I'm looking into it... just a moment please.
+CUSTOMER: This is taking forever! Why is it taking so long?
+AGENT: I apologize for the wait. I see the issue now.
+AGENT: Unfortunately, your order is outside the return window.
+CUSTOMER: What?! This is ridiculous! I want to speak to a manager!
+AGENT: I understand you're upset. Let me transfer you to supervision.
+CUSTOMER: No, I'm done. You people are useless.</pre>
+                        <button class="btn btn-secondary" onclick="loadExample()">
+                            <i class="fas fa-clone"></i> Load Example
+                        </button>
+                    </div>
+
+                    <!-- Format Help -->
+                    <details class="format-help">
+                        <summary>📝 Conversation Format Help</summary>
+                        <div class="help-content">
+                            <p><strong>Supported Formats:</strong></p>
+                            <ul>
+                                <li><strong>Plain Text:</strong> Lines starting with "CUSTOMER:" or "AGENT:"</li>
+                                <li><strong>JSON:</strong> Array of objects with "speaker" and "text" fields</li>
+                                <li><strong>CSV:</strong> Columns: speaker,text</li>
+                            </ul>
+                            <p><strong>Example:</strong></p>
+                            <code>CUSTOMER: Hello, I need help
+AGENT: Of course! What can I do for you?</code>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <!-- Loading Indicator -->
+            <div id="loadingIndicator" class="loading-indicator" style="display: none;">
+                <div class="spinner"></div>
+                <p>Analyzing conversation...</p>
+            </div>
+
+            <!-- Results Section (Hidden until analysis) -->
+            <section id="results" class="section results-section" style="display: none;">
+                
+                <!-- Overview Cards -->
+                <div class="results-overview">
+                    <h3>Analysis Results</h3>
+                    
+                    <div class="card-grid">
+                        <!-- Risk Level Card -->
+                        <div class="result-card risk-card">
+                            <div class="card-header">
+                                <h4>Risk Level</h4>
+                                <span class="risk-badge" id="riskBadge">--</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="risk-meter">
+                                    <div class="risk-bar" id="riskBar"></div>
+                                </div>
+                                <p class="risk-score" id="riskScore">0%</p>
+                            </div>
+                        </div>
+
+                        <!-- Escalation Status Card -->
+                        <div class="result-card status-card">
+                            <div class="card-header">
+                                <h4>Status</h4>
+                            </div>
+                            <div class="card-body">
+                                <p class="status-text" id="escalationStatus">--</p>
+                                <p class="status-detail" id="escalationDetail">--</p>
+                            </div>
+                        </div>
+
+                        <!-- Detected Signals Card -->
+                        <div class="result-card signals-card">
+                            <div class="card-header">
+                                <h4>Signals Detected</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="signalsList" class="signals-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Causal Explanation -->
+                <div class="explanation-box">
+                    <h3><i class="fas fa-lightbulb"></i> Causal Explanation</h3>
+                    <p id="explanationText" class="explanation-text">--</p>
+                    <div id="confidenceInfo" class="confidence-info">
+                        <strong id="confidenceLabel">Confidence: --</strong>
+                    </div>
+                </div>
+
+                <!-- Evidence Highlights -->
+                <div class="evidence-box">
+                    <h3><i class="fas fa-quote-left"></i> Evidence & Critical Turns</h3>
+                    <div id="evidencePanel" class="evidence-panel">
+                        <!-- Evidence items populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Detailed Causal Chain -->
+                <div class="chain-box">
+                    <h3><i class="fas fa-arrows-alt-h"></i> Causal Chain</h3>
+                    <div id="chainDiagram" class="chain-diagram">
+                        <!-- Causal chain visualization -->
+                    </div>
+                </div>
+
+                <!-- Full Conversation Transcript with Annotations -->
+                <div class="transcript-box">
+                    <h3><i class="fas fa-scroll"></i> Annotated Transcript</h3>
+                    <div id="annotatedTranscript" class="annotated-transcript">
+                        <!-- Full transcript with signal annotations -->
+                    </div>
+                </div>
+
+                <!-- Follow-up Questions Section -->
+                <div class="followup-box">
+                    <h3><i class="fas fa-comments"></i> Ask Follow-up Questions</h3>
+                    <p class="followup-hint">Ask clarifying questions about this analysis. The system will maintain context about this conversation.</p>
+                    
+                    <div id="sessionContext" style="display: none;" data-session-id=""></div>
+                    <div class="followup-id-input" style="margin:8px 0; display:flex; gap:8px;">
+                        <input id="transcriptIdInput" type="text" placeholder="Enter transcript ID (e.g., 6794-8660-4606-3216)" style="flex:1; padding:8px;" />
+                        <button id="loadTranscriptBtn" class="btn btn-secondary">Load Transcript</button>
+                    </div>
+                    
+                    <div class="followup-messages" id="followupMessages">
+                        <!-- Messages appear here -->
+                    </div>
+
+                    <div class="followup-input-area">
+                        <textarea id="followupQuestion" 
+                                  placeholder="Ask a follow-up question... e.g., 'What if the agent had responded faster?' or 'Can you find similar cases?'"
+                                  rows="3"></textarea>
+                        <button id="askBtn" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Ask Question
+                        </button>
+                    </div>
+                </div>
+
+                <!-- New Analysis Button -->
+                <div class="action-buttons">
+                    <button id="newAnalysisBtn" class="btn btn-secondary">
+                        <i class="fas fa-plus"></i> Analyze Another
+                    </button>
+                </div>
+            </section>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 Causal Chat Analysis - Hackathon Ready</p>
+            <p>Analyze conversations. Understand escalations. Improve outcomes.</p>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/analyze.js') }}"></script>
+</body>
+</html>
