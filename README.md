@@ -657,6 +657,7 @@ EXPORT_FORMATS = {
 **Full Stack**: Omm Snehasish Parida 
 **Data Analyst**: Goutam Kaity 
 
+**Youtube** : [Flow video] (https://youtu.be/yFLI2SzCpF8)
 **Repository**: [GitHub - Causal Chat Analysis](https://github.com/team-flow/causal-chat-analysis)  
 **Documentation**: [Full Documentation](docs/)  
 **Issue Tracker**: [Report Issues](https://github.com/team-flow/causal-chat-analysis/issues)
@@ -702,6 +703,6 @@ EXPORT_FORMATS = {
 
 **Status**: ✅ Active Development by Team Flow  
 **Last Updated**: February 7, 2026  
-**Version**: 2.0 Enhanced Visualization Edition  
+**Email** : rashmiranjanabc241947@gmail.com
 **Data**: 5,037 transcripts with enhanced metadata  
 **Team**: Flow - Rashmi, Laxmikant, Snehasish, Goutam
