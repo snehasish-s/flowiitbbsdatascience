@@ -16,7 +16,7 @@
 | Role | Member | Contribution |
 |------|--------|--------------|
 | **Team Leader** | Rashmi Ranjan Behera | Project Architecture, ML Pipeline, Dashboard Design |
-| **ML Engineer** | Laxmikant Naik | Causal Analysis, Signal Detection, Model Development |
+| **ML Engineer** | Laxmikanta Naik | Causal Analysis, Signal Detection, Model Development |
 | **Full Stack Developer** | Omm Snehasish Parida | Backend API, Frontend Dashboard, Visualization |
 | **Data Analyst** | Goutam Kaity | Data Processing, Statistical Insights, Performance Optimization |
 
@@ -653,7 +653,7 @@ EXPORT_FORMATS = {
 ## 📧 Support & Contribution - Team Flow
 
 **Team Lead**: Rashmi Ranjan Behera   
-**ML Engineer**: Laxmikant Naik
+**ML Engineer**: Laxmikanta Naik
 **Full Stack**: Omm Snehasish Parida 
 **Data Analyst**: Goutam Kaity 
 
